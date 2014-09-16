@@ -12,7 +12,7 @@ module OmniAuth
         :token_url => 'https://www.weasyl.com/api/oauth2/token',
       }
 
-      uid { raw_info['userid'] }
+      uid { raw_info['userid'].to_s }
 
       info do
         {
