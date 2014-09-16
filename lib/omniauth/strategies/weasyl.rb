@@ -23,6 +23,7 @@ module OmniAuth
         {
           :name => raw['login'],
           :username => raw['login'],
+          :nickname => raw['login'],
         }
       end
 
