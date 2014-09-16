@@ -4,13 +4,17 @@ require 'omniauth-oauth2'
 module OmniAuth
   module Strategies
     class Weasyl < OmniAuth::Strategies::OAuth2
-      option :name, 'weasyl'
-
-      option :client_options, {
-        :site => 'https://www.weasyl.com',
-        :authorize_url => 'https://www.weasyl.com/api/oauth2/authorize',
-        :token_url => 'https://www.weasyl.com/api/oauth2/token',
-      }
+      def initialize(app, consumer_key = nil, consumer_secret = nil, options = {}, &block)
+        site = options[:site] || 'https://www.weasyl.com'
+        opts = {
+          :client_options => {
+            :site => site,
+            :authorize_url => site + '/api/oauth2/authorize',
+            :token_url => site + '/api/oauth2/token',
+          },
+        }
+        super(app, consumer_key, consumer_secret, opts, &block)
+      end
 
       uid { raw_info['userid'].to_s }
 
@@ -28,15 +32,15 @@ module OmniAuth
 
       def access_token
         ::OAuth2::AccessToken.new(client, oauth2_access_token.token, {
-                                    :mode => :query,
+                                    :mode => :header,
                                     :param_name => 'oauth2_access_token',
                                     :expires_in => oauth2_access_token.expires_in,
-                                    :expires_at => oauth2_access_token.expires_at
+                                    :expires_at => oauth2_access_token.expires_at,
                                   })
       end
 
       def raw_info
-        @raw_info ||= access_token.get('/api/whoami').parsed
+        MultiJson.load access_token.get('/api/whoami').body
       end
     end
   end
