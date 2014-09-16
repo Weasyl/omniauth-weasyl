@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name = "omniauth-weasyl"
-  gem.version = "0.2"
+  gem.version = "0.2.1"
   gem.authors = ["weykent"]
   gem.email = ["weykent@weasyl.com"]
   gem.description = %q{A Weasyl strategy for OmniAuth.}

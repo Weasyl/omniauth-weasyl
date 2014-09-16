@@ -19,8 +19,10 @@ module OmniAuth
       uid { raw_info['userid'].to_s }
 
       info do
+        raw = raw_info
         {
-          :name => raw_info['login'],
+          :name => raw['login'],
+          :username => raw['login'],
         }
       end
 
