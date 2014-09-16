@@ -30,6 +30,12 @@ module OmniAuth
         { 'raw_info' => raw_info }
       end
 
+      def auth_hash
+        h = super
+        h.username = raw_info['login']
+        h
+      end
+
       alias :oauth2_access_token :access_token
 
       def access_token
@@ -42,7 +48,7 @@ module OmniAuth
       end
 
       def raw_info
-        MultiJson.load access_token.get('/api/whoami').body
+        @raw_info ||= MultiJson.load access_token.get('/api/whoami').body
       end
     end
   end
